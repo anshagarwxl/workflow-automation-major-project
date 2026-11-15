@@ -16,3 +16,6 @@ node_modules/
 
 # Logs
 *.log
+
+# Local H2 database files
+backend-springboot/data/

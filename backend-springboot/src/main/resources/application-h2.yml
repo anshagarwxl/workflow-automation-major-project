@@ -1,0 +1,9 @@
+# Zero-setup profile: embedded H2 instead of PostgreSQL (run with --spring.profiles.active=h2)
+spring:
+  datasource:
+    url: jdbc:h2:file:./data/eventreg;MODE=PostgreSQL;AUTO_SERVER=TRUE
+    username: sa
+    password:
+  h2:
+    console:
+      enabled: true
