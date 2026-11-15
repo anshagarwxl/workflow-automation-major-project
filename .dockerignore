@@ -1,0 +1,10 @@
+# Build context of the backend image is the repository root
+**/node_modules
+**/target
+**/dist
+backend-springboot/data
+docs
+.git
+.claude
+.env
+*.log

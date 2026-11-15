@@ -1,0 +1,33 @@
+# Camunda 8.8 Orchestration Cluster (Zeebe + Operate + Tasklist + Orchestration Cluster API)
+camunda:
+  system:
+    cpu-thread-count: "2"
+    io-thread-count: "2"
+  security:
+    authentication:
+      method: basic
+      # The portal backend calls the API without credentials inside the private Docker network.
+      # Production: set to false and give the backend an OIDC client (see README, "Secrets").
+      unprotectedApi: true
+    authorizations:
+      enabled: false
+    initialization:
+      users:
+        - username: demo
+          password: demo
+          name: Demo User
+          email: demo@campus.example.edu
+      defaultRoles:
+        admin:
+          users:
+            - demo
+  database:
+    index:
+      numberOfReplicas: 0
+  data:
+    secondary-storage:
+      type: elasticsearch
+      elasticsearch:
+        cluster-name: elasticsearch
+        url: http://elasticsearch:9200
+management.endpoints.configprops.show-values: always
