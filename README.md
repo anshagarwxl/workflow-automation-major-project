@@ -256,7 +256,14 @@ cp .env.example .env
 docker compose up -d --build
 ```
 
-The first start takes a few minutes (image downloads, Elasticsearch and Camunda start-up). Then open:
+The first start downloads about 2 GB of images and then takes a few minutes for Elasticsearch and Camunda to
+start. On a slow or unreliable connection, download the images first (one at a time, with retries):
+
+```bash
+./scripts/prefetch-images.sh
+```
+
+Then open:
 
 | URL | What |
 | --- | --- |
