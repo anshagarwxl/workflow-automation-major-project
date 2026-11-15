@@ -31,7 +31,7 @@ public class DirectoryController {
 
   @GetMapping("/students")
   public List<StudentView> searchStudents(@RequestParam(defaultValue = "") String q) {
-    return students.search(q.trim(), PageRequest.of(0, 20)).stream().map(views::student).toList();
+    return students.search(q.trim(), PageRequest.of(0, 50)).stream().map(views::student).toList();
   }
 
   @GetMapping("/students/{regNo}")

@@ -23,8 +23,14 @@ public class ViewMapper {
 
   public RegistrationView registration(Registration r) {
     FacultyAdvisor fa = r.getFacultyAdvisor();
-    String teamCode = r.getStatus() == RegistrationStatus.APPROVED
-        ? approvedTeams.findByRegistrationId(r.getId()).map(ApprovedTeam::getTeamCode).orElse(null) : null;
+    String teamCode = null;
+    if (r.getStatus() == RegistrationStatus.APPROVED) {
+      teamCode = approvedTeams.findByRegistrationId(r.getId()).map(ApprovedTeam::getTeamCode).orElse(null);
+    } else if (r.getStatus() == RegistrationStatus.PLACED && !r.getMembers().isEmpty()) {
+      teamCode = pool.findByEventIdAndRegNo(r.getEvent().getId(), r.getMembers().get(0).getRegNo())
+          .map(PoolEntry::getAllocatedRegistrationId).flatMap(approvedTeams::findByRegistrationId)
+          .map(ApprovedTeam::getTeamCode).orElse(null);
+    }
     return new RegistrationView(r.getId(), r.getEvent().getId(), r.getEvent().getCode(), r.getEvent().getName(),
         r.getMode(), r.getSource(), r.getTeamName(), fa == null ? null : fa.getId(), fa == null ? null : fa.getName(),
         r.getStatus(), r.getStatusReason(), r.getProcessInstanceKey(), r.getAllocationRound(), r.getDecision(),

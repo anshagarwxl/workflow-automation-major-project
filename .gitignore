@@ -19,3 +19,6 @@ node_modules/
 
 # Local H2 database files
 backend-springboot/data/
+
+# Local tooling
+.claude/

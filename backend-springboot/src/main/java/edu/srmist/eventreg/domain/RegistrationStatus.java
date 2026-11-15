@@ -13,13 +13,15 @@ public enum RegistrationStatus {
   PENDING_FA_REVIEW,
   ESCALATED,
   APPROVED,
-  REJECTED;
+  REJECTED,
+  /** Individual registration whose student was placed in an approved random team. */
+  PLACED;
 
   /** Statuses in which a student is considered "taken" for an event. */
   public static final Set<RegistrationStatus> ACTIVE =
-      EnumSet.of(SUBMITTED, VERIFYING, MANUAL_VERIFICATION, POOLED, PENDING_FA_REVIEW, ESCALATED, APPROVED);
+      EnumSet.of(SUBMITTED, VERIFYING, MANUAL_VERIFICATION, POOLED, PENDING_FA_REVIEW, ESCALATED, APPROVED, PLACED);
 
   public boolean isFinal() {
-    return this == INVALID || this == APPROVED || this == REJECTED;
+    return this == INVALID || this == APPROVED || this == REJECTED || this == PLACED;
   }
 }

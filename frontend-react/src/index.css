@@ -1,0 +1,35 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body { @apply text-slate-800 antialiased; }
+  h1, h2, h3 { @apply text-slate-900; }
+}
+
+@layer components {
+  .card { @apply bg-white rounded-xl border border-slate-200 shadow-card; }
+  .btn { @apply inline-flex items-center justify-center gap-2 rounded-lg px-3.5 py-2 text-sm font-medium transition disabled:opacity-50 disabled:cursor-not-allowed; }
+  .btn-primary { @apply btn bg-brand-600 text-white hover:bg-brand-700 shadow-sm; }
+  .btn-secondary { @apply btn bg-white text-slate-700 border border-slate-300 hover:bg-slate-50; }
+  .btn-danger { @apply btn bg-rose-600 text-white hover:bg-rose-700; }
+  .btn-success { @apply btn bg-emerald-600 text-white hover:bg-emerald-700; }
+  .btn-ghost { @apply btn text-slate-600 hover:bg-slate-100; }
+  .input { @apply block w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm placeholder:text-slate-400 focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20 disabled:bg-slate-50; }
+  .input-error { @apply border-rose-400 focus:border-rose-500 focus:ring-rose-500/20; }
+  .label { @apply mb-1 block text-sm font-medium text-slate-700; }
+  .th { @apply px-4 py-2.5 text-left text-xs font-semibold uppercase tracking-wide text-slate-500; }
+  .td { @apply px-4 py-3 text-sm text-slate-700; }
+}
+
+/* Live tracker markers on the bpmn-js canvas */
+.bpmn-container .djs-container { background: transparent; }
+.marker-completed:not(.djs-connection) .djs-visual > :nth-child(1) { stroke: #059669 !important; fill: #ecfdf5 !important; }
+.marker-active:not(.djs-connection) .djs-visual > :nth-child(1) { stroke: #2550eb !important; stroke-width: 3px !important; fill: #dbe6fe !important; }
+.marker-active:not(.djs-connection) .djs-visual > :nth-child(1) { animation: pulse-stroke 1.6s ease-in-out infinite; }
+.marker-incident:not(.djs-connection) .djs-visual > :nth-child(1) { stroke: #e11d48 !important; stroke-width: 3px !important; fill: #fff1f2 !important; }
+.marker-taken.djs-connection .djs-visual > path { stroke: #059669 !important; stroke-width: 2.5px !important; }
+.marker-taken.djs-connection .djs-visual > path { marker-end: none; }
+@keyframes pulse-stroke { 0%, 100% { stroke-opacity: 1; } 50% { stroke-opacity: .35; } }
+.token-overlay { @apply rounded-full bg-brand-600 px-1.5 text-[10px] font-semibold text-white shadow; }
+.incident-overlay { @apply rounded-full bg-rose-600 px-1.5 text-[10px] font-semibold text-white shadow; }

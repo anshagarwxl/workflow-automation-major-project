@@ -208,6 +208,8 @@ public class RegistrationWorkflowService {
     registration.changeStatus(RegistrationStatus.APPROVED, "Approved by " + (decidedBy == null ? "reviewer" : decidedBy));
     for (PoolEntry entry : pool.findByEventIdAndRegNoIn(event.getId(), memberRegNos(registration))) {
       entry.moveTo(PoolStatus.PLACED, registration.getId());
+      updateSourceRegistration(entry, RegistrationStatus.PLACED,
+          "Placed in random team " + registration.getTeamName() + " (" + team.getTeamCode() + ")", processInstanceKey);
     }
     audit.record(registration.getId(), event.getId(), processInstanceKey, "APPROVED_SAVED",
         "Saved to Approved Teams DB", "Team code " + team.getTeamCode(), "SYSTEM", "success");
@@ -230,6 +232,8 @@ public class RegistrationWorkflowService {
       for (PoolEntry entry : pool.findByEventIdAndRegNoIn(registration.getEvent().getId(), memberRegNos(registration))) {
         if (entry.getStatus() == PoolStatus.ALLOCATED) {
           entry.moveTo(PoolStatus.WAITING, null);
+          updateSourceRegistration(entry, null,
+              "Back in the pool: random team " + registration.getTeamName() + " was not approved", null);
           returned = true;
         }
       }
@@ -329,6 +333,8 @@ public class RegistrationWorkflowService {
         if (e != null) {
           e.moveTo(PoolStatus.ALLOCATED, r.getId());
           e.setTimesAllocated(e.getTimesAllocated() + 1);
+          updateSourceRegistration(e, null, "Allocated to random team " + r.getTeamName()
+              + " (round " + round + "), waiting for FA confirmation", null);
         }
       });
       audit.record(r.getId(), eventId, processInstanceKey, "RANDOM_TEAM_CREATED", "Random team created",
@@ -409,6 +415,19 @@ public class RegistrationWorkflowService {
         r.getMembers().stream().map(m -> new MemberPayload(m.getRegNo(), m.getName(), m.getEmail())).toList(),
         fa == null ? null : fa.getId(), fa == null ? null : fa.getName(), fa == null ? null : fa.getEmail(),
         r.getAllocationRound());
+  }
+
+  /** Keeps the student's own (individual) registration in step with what happens to their random team. */
+  private void updateSourceRegistration(PoolEntry entry, RegistrationStatus status, String reason, Long processInstanceKey) {
+    if (entry.getSourceRegistrationId() == null) {
+      return;
+    }
+    registrations.findById(entry.getSourceRegistrationId()).ifPresent(source -> {
+      source.changeStatus(status == null ? source.getStatus() : status, reason);
+      audit.record(source.getId(), source.getEvent().getId(), processInstanceKey,
+          status == RegistrationStatus.PLACED ? "PLACED" : "POOL_UPDATE", status == RegistrationStatus.PLACED ? "Placed in a team" : "Allocation update",
+          reason, "SYSTEM", status == RegistrationStatus.PLACED ? "success" : "info");
+    });
   }
 
   private FacultyAdvisor pickAdvisor(List<UnallocatedStudent> members) {
