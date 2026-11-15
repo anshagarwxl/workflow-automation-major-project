@@ -90,7 +90,9 @@ public class TrackerService {
         .map(i -> new IncidentView(i.getIncidentKey(), i.getElementId(), i.getErrorType() == null ? null : i.getErrorType().name(),
             i.getErrorMessage(), i.getCreationTime(), i.getState() == null ? null : i.getState().name()))
         .toList();
-    incidents.stream().filter(i -> "ACTIVE".equals(i.state())).forEach(i -> incident.add(i.elementId()));
+    // PENDING: just raised, not yet fully processed; treat it as open like ACTIVE
+    incidents.stream().filter(i -> "ACTIVE".equals(i.state()) || "PENDING".equals(i.state()))
+        .forEach(i -> incident.add(i.elementId()));
 
     List<InstanceView> children = safe(() -> engine.childInstances(processInstanceKey), List.<ProcessInstance>of())
         .stream().map(TrackerService::instanceView).toList();

@@ -28,7 +28,7 @@ export default function TrackerPanel({ tracker, height = 520, title }) {
     );
   }
   const inst = tracker.instance;
-  const active = tracker.incidents.filter((i) => i.state === 'ACTIVE');
+  const active = tracker.incidents.filter((i) => i.state === 'ACTIVE' || i.state === 'PENDING');
   return (
     <Card title={title || PROCESS_NAMES[inst.bpmnProcessId] || inst.bpmnProcessId}
       subtitle={<>Instance <span className="font-mono">{inst.processInstanceKey}</span> · version {inst.version} · started {fmtTime(inst.startDate)}</>}
