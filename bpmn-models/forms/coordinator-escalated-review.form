@@ -1,0 +1,98 @@
+{
+  "executionPlatform": "Camunda Cloud",
+  "executionPlatformVersion": "8.8.0",
+  "exporter": {
+    "name": "Camunda Modeler",
+    "version": "5.40.0"
+  },
+  "schemaVersion": 16,
+  "id": "coordinator-escalated-review",
+  "type": "default",
+  "components": [
+    {
+      "type": "text",
+      "id": "Field_heading",
+      "text": "## Escalated team review\nThe Faculty Advisor ({{registration.faName}}) did not decide within the agreed time ({{sla.faEscalationAfter}}). As Event Coordinator, approve or reject the team."
+    },
+    {
+      "type": "text",
+      "id": "Field_teamSummary",
+      "text": "**Event:** {{registration.eventName}}\n\n**Team name:** {{registration.teamName}}\n\n**Team type:** {{if registration.source = \"RANDOM\" then \"Randomly allocated team\" else \"Self-formed team\"}}"
+    },
+    {
+      "type": "table",
+      "id": "Field_members",
+      "label": "Team members",
+      "dataSource": "=registration.members",
+      "rowCount": 10,
+      "columns": [
+        {
+          "label": "Reg. no.",
+          "key": "regNo"
+        },
+        {
+          "label": "Name",
+          "key": "name"
+        },
+        {
+          "label": "Email",
+          "key": "email"
+        }
+      ]
+    },
+    {
+      "type": "table",
+      "id": "Field_memberChecks",
+      "label": "Student Records verification",
+      "dataSource": "=memberChecks",
+      "rowCount": 10,
+      "columns": [
+        {
+          "label": "Reg. no.",
+          "key": "regNo"
+        },
+        {
+          "label": "Department",
+          "key": "department"
+        },
+        {
+          "label": "Enrollment",
+          "key": "enrollmentStatus"
+        },
+        {
+          "label": "Eligible",
+          "key": "eligible"
+        }
+      ]
+    },
+    {
+      "type": "radio",
+      "id": "Field_decision",
+      "label": "Decision",
+      "key": "decision",
+      "values": [
+        {
+          "label": "Approve",
+          "value": "APPROVED"
+        },
+        {
+          "label": "Reject",
+          "value": "REJECTED"
+        }
+      ],
+      "validate": {
+        "required": true
+      }
+    },
+    {
+      "type": "textarea",
+      "id": "Field_remarks",
+      "label": "Remarks",
+      "key": "faRemarks",
+      "description": "Required when rejecting, so the team knows what to fix. Sent to every team member.",
+      "validate": {
+        "maxLength": 1000
+      }
+    }
+  ]
+}

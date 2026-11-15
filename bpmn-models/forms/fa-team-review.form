@@ -1,6 +1,10 @@
 {
   "executionPlatform": "Camunda Cloud",
-  "executionPlatformVersion": "8.6.0",
+  "executionPlatformVersion": "8.8.0",
+  "exporter": {
+    "name": "Camunda Modeler",
+    "version": "5.40.0"
+  },
   "schemaVersion": 16,
   "id": "fa-team-review",
   "type": "default",
@@ -13,7 +17,7 @@
     {
       "type": "text",
       "id": "Field_teamSummary",
-      "text": "**Team name:** {{registration.teamName}}\n\n**Team type:** {{registration.source}}"
+      "text": "**Event:** {{registration.eventName}}\n\n**Team name:** {{registration.teamName}}\n\n**Team type:** {{if registration.source = \"RANDOM\" then \"Randomly allocated team\" else \"Self-formed team\"}}"
     },
     {
       "type": "table",
@@ -33,6 +37,31 @@
         {
           "label": "Email",
           "key": "email"
+        }
+      ]
+    },
+    {
+      "type": "table",
+      "id": "Field_memberChecks",
+      "label": "Student Records verification",
+      "dataSource": "=memberChecks",
+      "rowCount": 10,
+      "columns": [
+        {
+          "label": "Reg. no.",
+          "key": "regNo"
+        },
+        {
+          "label": "Department",
+          "key": "department"
+        },
+        {
+          "label": "Enrollment",
+          "key": "enrollmentStatus"
+        },
+        {
+          "label": "Eligible",
+          "key": "eligible"
         }
       ]
     },
@@ -60,7 +89,10 @@
       "id": "Field_remarks",
       "label": "Remarks",
       "key": "faRemarks",
-      "description": "Required when rejecting, so the team knows what to fix."
+      "description": "Required when rejecting, so the team knows what to fix. Sent to every team member.",
+      "validate": {
+        "maxLength": 1000
+      }
     }
   ]
 }
