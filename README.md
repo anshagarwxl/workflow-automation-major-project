@@ -86,14 +86,15 @@ flowchart LR
   end
   MAIL["SMTP server<br/>(Mailpit in dev)"]
 
-  UI -->|HTTPS / JSON| NGINX --> BE
-  BE -->|gRPC: start instance, publish message,<br/>activate + complete jobs| ORCH
-  BE -->|REST: search user tasks, element instances,<br/>incidents, variables; assign + complete tasks| ORCH
+  UI -->|"HTTPS / JSON"| NGINX
+  NGINX --> BE
+  BE -->|"gRPC: start instance, publish message,<br/>activate + complete jobs"| ORCH
+  BE -->|"REST: search user tasks, element instances,<br/>incidents, variables; assign + complete tasks"| ORCH
   BE --> PG
   ORCH --> ES
-  CONN -->|activate connector jobs| ORCH
-  CONN -->|GET /api/sis/students/{regNo}| SIS
-  CONN -->|SMTP| MAIL
+  CONN -->|"activate connector jobs"| ORCH
+  CONN -->|"GET /api/sis/students/#123;regNo#125;"| SIS
+  CONN -->|"SMTP"| MAIL
   SIS --- BE
 ```
 
